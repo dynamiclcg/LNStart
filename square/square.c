@@ -9,16 +9,18 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include "pstack.h"
 
 /* ***** Global variable ***** */
 int raw,col;//raw and col value for the map
 int mapSelf[10][10]={{0},{0}};//the pointer point to map
 
-typedef struct tway{
-  int x;
-  int y;
-  struct tway *next;
-}tway;
+// defined in the pstack.h
+/* typedef struct tway{ */
+/*   int x; */
+/*   int y; */
+/*   struct tway *next; */
+/* }tway; */
 
 /*
  * Function : showLine
@@ -165,13 +167,14 @@ void showPath(struct tway *path)
  * The function to move :
  *         up > right -> down -> left
  */
-void moveNext(tway **cur)
+int moveNext(tway **cur)
 {
   int x=(*cur)->x;
   int y=(*cur)->y;
   int check=0;
  
   mapSelf[x][y]=1;//means this place passed
+  showInfo(mapSelf,raw,col);
   tway *newp=(tway *)malloc(sizeof(tway));
   
   /* UP value */
@@ -179,24 +182,24 @@ void moveNext(tway **cur)
     newp->x=x-1;
     newp->y=y;
     check++;
-  }
+  }else
 
   /* RIGHT value */
   if((y+1<col) && (mapSelf[x][y+1]==0)){
     newp->x=x;
     newp->y=y+1;
     check++;
-  }
+  }else
 
   /* DOWN value */
   if((x+1<raw) && (mapSelf[x+1][y]==0)){
     newp->x=x+1;
     newp->y=y;
     check++;
-  }
+  }else
   
   /* LEFT value */
-  if((y-1<0) && (mapSelf[x][y-1]==0)){
+  if((y-1>=0) && (mapSelf[x][y-1]==0)){
     newp->x=x;
     newp->y=y-1;
     check++;
@@ -205,6 +208,7 @@ void moveNext(tway **cur)
   if(check==0){
     return 0;
   }
+
   (*cur)->next=newp;
   push(newp);
   return 1;
@@ -219,19 +223,29 @@ void moveNext(tway **cur)
 void startWork(tway **path)
 {
   int retcode ;
- 
-  while(1){
-    retcode = moveNext(path);
+  tway *cur=(tway *)malloc(sizeof(tway));
+  if(!cur){
+    printf("Failed to malloc memery for startWork:cur\n");
+    exit(1);
+  }
+   
+  cur->x=(*path)->x;
+  cur->y=(*path)->y;
+
+  int i=0;
+  while(i<10){
+    retcode = moveNext(&cur);
     if(retcode != 0){
       /* check if the stack is empth */
       if(isEmpty())
-	return 0;
+	//means all the node passed
+	break;
       /* there exists a stack of the path, when move to next , push it into stack*/
       /* and when on other way to move , pop */
       /* if the stack is empty, means the stack run out, and then end the program */
-      (*path)-next=pop();
-      (*path)=(*path->next);
+      cur=pop();
     }
+    i++;
   }
 }
 
@@ -245,10 +259,12 @@ int main()
   getNumber("Enter raw number : ", &raw);
   getNumber("Enter col number : ", &col);
 
+  printf("raw info : %d , col info : %d\n",raw,col);
   //randMap(raw,col);
   randStone(raw,col);
   showInfo(mapSelf,raw,col);
-  
+  //initialize the stack for the program
+  initialize();
 
   tway *path=(tway *)malloc(sizeof(tway));
   if(!path){
@@ -264,6 +280,10 @@ int main()
   
   showPath(path);
   showInfo(mapSelf,raw,col);
+  
+  //free the stack data
+  clearStack();
   free(path);
-  printf("raw info : %d , col info : %d\n",raw,col);
+
+
 }

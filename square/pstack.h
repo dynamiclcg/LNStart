@@ -44,7 +44,7 @@ int push(tway *newp);
  * return : 
  * tway * , pop out the value of top
  */
-tway * pop();
+tway *pop();
 
 
 /*

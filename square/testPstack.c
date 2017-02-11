@@ -6,15 +6,15 @@ int main()
 {
   initialize();
   
-  tway *out,*temp=(tway *)malloc(sizeof(tway));
+  tway *temp=(tway *)malloc(sizeof(tway));
+  tway *out=NULL;
   
   temp->x=1;
   temp->y=2;
   
   push(temp);
   
-  out=pop();
-  printf("out : x=%d y=%d\n",out->x,out->y);
+  out=pop(); 
   temp->x=2;
   temp->y=3;
   
@@ -29,10 +29,9 @@ int main()
   push(temp);
   
   out=pop();
-  printf("out : x=%d y=%d\n",out->x,out->y);
   out=pop();
-  printf("out : x=%d y=%d\n",out->x,out->y);
   
   clearStack();
   free(temp);
+  free(out);
 }

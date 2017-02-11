@@ -27,9 +27,10 @@ int initialize()
 
 int push(tway *newp)
 {
-  if(size==0){
+  if(isEmpty()){
     pstack->x=newp->x;
     pstack->y=newp->y;
+    pstack->next=NULL;
   }else{
     tway *pushed=(tway *)malloc(sizeof(tway));
     if(!pushed){
@@ -51,15 +52,15 @@ int push(tway *newp)
     }
     pre->next=pushed;
     //the size of pstack added
-    size++;
   }
-    return 0;
+  size++;
+  return 0;
 }
 
 
-tway * pop(){
+tway *pop(){
   if(isEmpty()){
-    return NULL;
+    return;
   }
   tway *pre=pstack;
   tway *cur=pstack->next;
@@ -73,7 +74,6 @@ tway * pop(){
   if(cur==NULL){
     result->x=pstack->x;
     result->y=pstack->y;
-    pstack=NULL;
     size--;
     return result;
   }
@@ -83,9 +83,14 @@ tway * pop(){
     pre=cur;
     cur=cur->next;
   }
+  result->x=cur->x;
+  result->y=cur->y;
+  free(cur);
   pre->next=NULL;
   size--;
-  return pre;
+  
+   /* printf("pre x pointer: %l , pre y pointer: %l\n",&(pre->x),&(pre->y)); */
+  return result;
 }
 
 
