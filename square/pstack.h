@@ -7,8 +7,8 @@
  *     in order to realize some specific stack type
  */
 
-#include <stdio.h>
-#include <stdlib.h>
+#ifndef PSTACK_H
+#define PSTACK_H
 
 typedef struct tway{
   int x;
@@ -44,7 +44,7 @@ int push(tway *newp);
  * return : 
  * tway * , pop out the value of top
  */
-tway *pop();
+tway * pop();
 
 
 /*
@@ -68,3 +68,5 @@ int isEmpty();
  * return : void
  */
 void clearStack();
+
+#endif

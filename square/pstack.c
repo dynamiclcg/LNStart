@@ -45,10 +45,8 @@ int push(tway *newp)
  
     //find the point at the top of stack
     tway *pre=pstack;
-    tway *next=pstack->next;
-    while(next){
-      pre=next;
-      next=pre->next;
+    while(pre->next){
+      pre=pre->next;
     }
     pre->next=pushed;
     //the size of pstack added
@@ -60,7 +58,7 @@ int push(tway *newp)
 
 tway *pop(){
   if(isEmpty()){
-    return;
+    return NULL;
   }
   tway *pre=pstack;
   tway *cur=pstack->next;
@@ -74,22 +72,19 @@ tway *pop(){
   if(cur==NULL){
     result->x=pstack->x;
     result->y=pstack->y;
-    size--;
-    return result;
-  }
+    }else {
 
-  /* Find the last null value and remove one */
-  while(cur->next){
-    pre=cur;
-    cur=cur->next;
+    /* Find the last null value and remove one */
+    while(cur->next){
+      pre=cur;
+      cur=cur->next;
+    }
+    result->x=cur->x;
+    result->y=cur->y;
+    free(cur);
+    pre->next=NULL;
   }
-  result->x=cur->x;
-  result->y=cur->y;
-  free(cur);
-  pre->next=NULL;
   size--;
-  
-   /* printf("pre x pointer: %l , pre y pointer: %l\n",&(pre->x),&(pre->y)); */
   return result;
 }
 
@@ -123,11 +118,6 @@ void clearStack()
   if(isEmpty){
     return;
   }
-
-  tway *cur,*pre=pstack;
-  while(pre){
-    cur=pre;
-    pre=pre->next;
-    free(cur);
-  }
+  free(pstack);
+  size=0;
 }
