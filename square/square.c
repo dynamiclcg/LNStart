@@ -8,16 +8,11 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include "pstack.h"
 
 /* ***** Global variable ***** */
-int raw,col;//raw and col value for the map
-int mapSelf[10][10]={{0},{0}};//the pointer point to map
-
-typedef struct tway{
-  int x;
-  int y;
-  struct tway *next;
-}tway;
+int raw,col;/* raw and col value for the map */
+int mapSelf[10][10]={{0},{0}};/* the pointer point to map */
 
 /*
  * Function : showLine
@@ -142,10 +137,6 @@ void showPath(tway *path)
   
   preway=path;
   curway=preway->next;
-  if(!preway){
-    printf("The path is null!\n");
-    exit(0);
-  }
   
   printf("[Start : (%2d , %2d)\n",preway->x, preway->y);
   while(curway){
@@ -167,9 +158,7 @@ void showPath(tway *path)
  */
 int moveNext(int xp,int yp)
 {
-  int check=0;
- 
-    /* UP value */
+  /* UP value */
   if((xp-1>=0) && (mapSelf[xp-1][yp]==0)){
     return 1;
   }
@@ -213,6 +202,7 @@ int isFinished()
   /* if no free space,just terminated */
   return 1;
 }
+
 /*
  * Function : startWork
  * Param : parameter
@@ -224,7 +214,7 @@ void startWork(int x,int y)
   int i=0;
   
   tway *cur=(tway *)malloc(sizeof(tway));
-  tway *temp;
+  tway *temp=NULL;
 
   if(!cur){
     printf("Failed to malloc cur memory in startWork!\n");
@@ -245,7 +235,6 @@ void startWork(int x,int y)
     /* According the return value to do next  */
     switch(retcode){
     case 0:
-      temp=NULL;
       temp=pop();
       cur->x=temp->x;
       cur->y=temp->y;
@@ -290,10 +279,10 @@ void startWork(int x,int y)
     /*   cur=cur->next; */
     /* } */
     /* record the path info */
-    //(*path)->next=cur;
+    /* (*path)->next=cur; */
     i++;
-    if(isFinished())
-      break;
+    /* be caseful with if the map random with no way to list */
+    if(isEmpty()||isFinished())  break;
   }
   free(cur);
 }
@@ -308,7 +297,7 @@ int main()
   getNumber("Enter raw number : ", &raw);
   getNumber("Enter col number : ", &col);
 
-  //randMap(raw,col);
+  /* randMap(raw,col); */
   randStone(raw,col);
   showInfo(mapSelf,raw,col);
   
@@ -321,15 +310,14 @@ int main()
   /* initialize the stack */
   initialize(); 
 
-  path->x=0;
-  path->y=0;
-  path->next=NULL;
-
-  startWork(path->x,path->y);
+  startWork(rand()%raw,rand()%col);
   
-  //showPath(path);
-  //showInfo(mapSelf,raw,col);
+  /* showPath(path); */
+  /* showInfo(mapSelf,raw,col); */
   clearStack();
+
+  /* free the path  */
   free(path);
   printf("raw info : %d , col info : %d\n",raw,col);
+  return 0;
 }

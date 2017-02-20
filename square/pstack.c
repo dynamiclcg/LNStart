@@ -15,11 +15,8 @@ int initialize()
 {
   //the size of pstack is 0
   size=0;
-  pstack=(tway *)malloc(sizeof(tway));
-  if(!pstack){
-    printf("Failed to initialize of malloc for stack\n");
-    exit(1);
-  }
+  pstack=NULL;
+
   //no need do other thing
   return 0;
 }
@@ -27,22 +24,19 @@ int initialize()
 
 int push(tway *newp)
 {
-  if(isEmpty()){
-    pstack->x=newp->x;
-    pstack->y=newp->y;
-    pstack->next=NULL;
-  }else{
-    tway *pushed=(tway *)malloc(sizeof(tway));
-    if(!pushed){
-      printf("Failed to create a new node!\n");
-      exit(0);
-    }
+  tway *pushed=(tway *)malloc(sizeof(tway));
+  if(!pushed){
+    printf("Failed to create a new node!\n");
+    return 1;
+  }
+  //put the value into new file
+  pushed->x=newp->x;
+  pushed->y=newp->y;
+  pushed->next=NULL;
 
-    //put the value into new file
-    pushed->x=newp->x;
-    pushed->y=newp->y;
-    pushed->next=NULL;
- 
+  if(isEmpty()){
+    pstack=pushed;
+  }else{
     //find the point at the top of stack
     tway *pre=pstack;
     while(pre->next){
@@ -72,6 +66,7 @@ tway *pop(){
   if(cur==NULL){
     result->x=pstack->x;
     result->y=pstack->y;
+    free(pstack);
     }else {
 
     /* Find the last null value and remove one */
@@ -115,9 +110,16 @@ int isEmpty()
 
 void clearStack()
 {
-  if(isEmpty){
-    return;
+
+  if(!isEmpty()){
+    tway *pre=pstack;
+    tway *cur=pre->next;
+    while(cur){
+      free(pre);
+      pre=cur;
+      cur=pre->next;
+    }
+    free(pre);
   }
-  free(pstack);
   size=0;
 }
