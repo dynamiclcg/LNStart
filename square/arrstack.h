@@ -28,16 +28,13 @@ int y;
 }item;
 
 /* the constant size to realloc */
-const resize 10;
+#define resize 10
 
 /* the MAXIMIZE size of stack */
-const MAXIMIZE 1000;
+#define limitSize 1000
 
 /* the size of stack */
-int size;
-
 /* the stack for array stack */
-item *astack;
 
 /* the initial operation for stack */
 int initialize();
@@ -46,8 +43,10 @@ int initialize();
 void push(item i);
 
 /* the pop operation for stack */
-item pop();
+void pop(item *i);
 
+/* the top element for stack */
+void top(item *i);
 /* check if stack full */
 int isOverflow();
 
@@ -55,6 +54,8 @@ int isOverflow();
 int isEmpty();
 
 /* resize if the stack overflow */
-void resize();
+void reSize();
 
+/* clear stack function */
+void clearStack();
 #endif
