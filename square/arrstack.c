@@ -25,7 +25,7 @@ int initialize()
   size = resize;
   astack = (item *) malloc(sizeof(item) * size);
   if ( !astack ) {
-    printf("Error : initialize stack fail\n");
+    fprintf( stderr , "Error : initialize stack fail\n");
     exit(1);
   }
   return 0;
@@ -34,7 +34,7 @@ int initialize()
 void push(item i)
 {
   if ( !astack ) {
-    printf("Error : stack error with push!\n");
+    fprintf( stderr , "Error : stack error with push!\n");
     exit(1);
   } else if ( isOverflow() ) {
     reSize();
@@ -49,14 +49,14 @@ void reSize()
 {
   int newsize = size + resize;
   if( size >= limitSize ){
-    printf("Error : stack over flow !\n");
+    fprintf( stderr , "Error : stack over flow !\n");
     clearStack();
     exit(1);
   }
   
   item *newastack = (item *)malloc(sizeof(item) * newsize);
   if ( !newastack ) {
-    printf("Error : failed to resize stack!\n");
+    fprintf( stderr , "Error : failed to resize stack!\n");
     clearStack();
     exit(1);
   }
@@ -75,7 +75,7 @@ void reSize()
 void pop(item *i)
 {
   if ( !astack ) {
-    printf("Error : initialize stack first!\n");
+    fprintf( stderr , "Error : initialize stack first!\n");
     exit(1);
   } else if ( isEmpty() ){
     printf("Warning : empty stack!\n");
@@ -90,7 +90,7 @@ void pop(item *i)
 void top(item *i)
 {
   if ( !astack ) {
-    printf("Error : initialize stack first!\n");
+    fprintf( stderr , "Error : initialize stack first!\n");
     exit(1);
   } else if ( isEmpty() ){
     printf("Warning : empty stack!\n");
